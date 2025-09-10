@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fa">
+<head>
+  <meta charset="utf-8" />
+  <title>DRF Streaming SSE Demo</title>
+</head>
+<body>
+  <h1>استریم پاسخ از DRF (SSE)</h1>
+  <button id="btn">Start Stream</button>
+  <pre id="out"></pre>
+
+  <script>
+    document.getElementById('btn').addEventListener('click', () => {
+      const out = document.getElementById('out');
+      out.textContent = '';
+      const es = new EventSource('/api/v1/stream-ai-response/');
+      es.onmessage = (e) => {
+        out.textContent += e.data + '\n';
+      };
+      es.onerror = (e) => {
+        out.textContent += '\n[error] Stream closed.\n';
+        es.close();
+      };
+    });
+  </script>
+</body>
+</html>
